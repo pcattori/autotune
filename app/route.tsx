@@ -1,7 +1,11 @@
-import { route$, loader$, action$, type Params, Link } from "../autotune";
+import { route$, loader$, action$, type Params, Link } from "autotune";
 import { db } from "~/db";
+import { type Stripe } from "~/stripe";
 
-type Stripe = "Stripe";
+type Context = {
+  params: Params<"slug" | "lang">;
+  context: { stripe: Stripe };
+};
 
 const loader = loader$(async () => {
   let data = await db.read();
@@ -13,31 +17,19 @@ const action = action$(async ({ request }) => {
   return null;
 });
 
-type MyProps = {
-  params: Params<"slug" | "lang">;
-  context: { stripe: Stripe };
-};
-
-// type Props = Record<string, unknown> | undefined;
-// let myprops: MyProps = {} as any;
-// let props: Props = {} as any;
-// props = myprops;
-// myprops = props;
-
-const route = ({ params }: MyProps) =>
-  route$({
-    loader,
-    action,
-    component: ({ data }) => {
-      return (
-        <>
-          <h1>Welcome to Autotune</h1>
-          <h2>You're on the {params.slug} page</h2>
-          <pre>{data}</pre>
-          <Link to="about">About</Link>
-        </>
-      );
-    },
-  });
+const route = route$(({ params }: Context) => ({
+  loader,
+  action,
+  component: ({ data }) => {
+    return (
+      <>
+        <h1>Welcome to Autotune</h1>
+        <h2>You're on the {params.slug} page</h2>
+        <pre>{data}</pre>
+        <Link to="about">About</Link>
+      </>
+    );
+  },
+}));
 
 export default route;
