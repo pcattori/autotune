@@ -6,29 +6,33 @@ export const loader$ = <T extends Loader>(loader: T): T => loader;
 type Action = (args: { request: Request }) => unknown;
 export const action$ = <T extends Action>(action: T): T => action;
 
-type Component<L extends Loader> = (data: Awaited<ReturnType<L>>) => ReactNode;
+type Component<P extends string[], L extends Loader> = (args: {
+  params: string[] extends P
+    ? Record<never, string>
+    : Record<P[number], string>;
+  data: Awaited<ReturnType<L>>;
+}) => ReactNode;
 
-type Props = {
-  params: Record<string, string>;
-  context: Record<string, unknown>;
-};
-
-type Route<L extends Loader, A extends Action, C extends Component<L>> = {
+type Route<
+  P extends string[],
+  L extends Loader,
+  A extends Action,
+  C extends Component<P, L>,
+> = {
+  params?: P;
   loader?: L;
   action?: A;
   component?: C;
 };
 
 export const route$ = <
-  P extends Props,
+  const P extends string[],
   L extends Loader,
   A extends Action,
-  C extends Component<L>,
+  C extends Component<P, L>,
 >(
-  createRoute: (props: P) => Route<L, A, C>,
-) => createRoute;
-
-export type Params<Key extends string> = Record<Key, string>;
+  route: Route<P, L, A, C>,
+) => route;
 
 export const Link = (props: { to: string; children: ReactNode }) => (
   <a href={props.to} />

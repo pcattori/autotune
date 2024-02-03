@@ -1,20 +1,14 @@
-import { route$, loader$, action$, type Params, Link } from "autotune";
+import { route$, loader$, action$, Link } from "autotune";
 import { db } from "~/db";
-import { type Stripe } from "~/stripe";
 
-export const routeA = route$(() => ({
+export const routeA = route$({
   loader: ({ request }) => ({ world: request.url }),
-  component: ({ world }) => <h1>Hello, {world}</h1>,
-}));
-
-type Context = {
-  params: Params<"slug" | "lang">;
-  context: { stripe: Stripe };
-};
+  component: ({ data }) => <h1>Hello, {data.world}</h1>,
+});
 
 const loader = loader$(async () => {
   let data = await db.read();
-  return { data };
+  return data;
 });
 
 const action = action$(async ({ request }) => {
@@ -22,10 +16,11 @@ const action = action$(async ({ request }) => {
   return null;
 });
 
-export const routeB = route$(({ params }: Context) => ({
+export const routeB = route$({
+  params: ["slug", "id"],
   loader,
   action,
-  component: ({ data }) => {
+  component: ({ params, data }) => {
     return (
       <>
         <h1>Welcome to Autotune</h1>
@@ -35,4 +30,4 @@ export const routeB = route$(({ params }: Context) => ({
       </>
     );
   },
-}));
+});
