@@ -2,6 +2,11 @@ import { route$, loader$, action$, type Params, Link } from "autotune";
 import { db } from "~/db";
 import { type Stripe } from "~/stripe";
 
+export const routeA = route$(() => ({
+  loader: ({ request }) => ({ world: request.url }),
+  component: ({ world }) => <h1>Hello, {world}</h1>,
+}));
+
 type Context = {
   params: Params<"slug" | "lang">;
   context: { stripe: Stripe };
@@ -17,7 +22,7 @@ const action = action$(async ({ request }) => {
   return null;
 });
 
-const route = route$(({ params }: Context) => ({
+export const routeB = route$(({ params }: Context) => ({
   loader,
   action,
   component: ({ data }) => {
@@ -31,5 +36,3 @@ const route = route$(({ params }: Context) => ({
     );
   },
 }));
-
-export default route;
