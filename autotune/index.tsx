@@ -6,7 +6,7 @@ export const loader$ = <T extends Loader>(loader: T): T => loader;
 type Action = (args: { request: Request }) => unknown;
 export const action$ = <T extends Action>(action: T): T => action;
 
-type Component<P extends string[], L extends Loader> = (args: {
+type Component<P extends string, L extends Loader> = (args: {
   params: string[] extends P
     ? Record<never, string>
     : Record<P[number], string>;
@@ -14,19 +14,19 @@ type Component<P extends string[], L extends Loader> = (args: {
 }) => ReactNode;
 
 type Route<
-  P extends string[],
+  P extends string,
   L extends Loader,
   A extends Action,
   C extends Component<P, L>,
 > = {
-  params?: P;
+  params?: P[];
   loader?: L;
   action?: A;
   component?: C;
 };
 
 export const route$ = <
-  const P extends string[],
+  const P extends string,
   L extends Loader,
   A extends Action,
   C extends Component<P, L>,

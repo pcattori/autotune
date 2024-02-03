@@ -17,9 +17,10 @@ const action = action$(async ({ request }) => {
 });
 
 export const routeB = route$({
-  params: ["slug", "id"],
+  params: ["slug"],
   loader,
   action,
+  // displayName?: string - sets the React display name
   component: ({ params, data }) => {
     return (
       <>
@@ -31,3 +32,5 @@ export const routeB = route$({
     );
   },
 });
+
+export default routeB;
