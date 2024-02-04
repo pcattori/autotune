@@ -1,12 +1,21 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
-    "typecheck": "tsc"
+    "postinstall": "pnpm typegen",
+    "typecheck": "tsc",
+    "typegen": "tsx ./autotune/typegen.ts"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
+    "dedent": "^1.5.1",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

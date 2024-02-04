@@ -13,11 +13,11 @@ type Component<P extends string, L extends Loader> = (args: {
   data: Awaited<ReturnType<L>>;
 }) => ReactNode;
 
-type Route<
-  P extends string,
-  L extends Loader,
-  A extends Action,
-  C extends Component<P, L>,
+export type Route<
+  P extends string = string,
+  L extends Loader = Loader,
+  A extends Action = Action,
+  C extends Component<P, L> = Component<P, L>,
 > = {
   params?: P[];
   loader?: L;

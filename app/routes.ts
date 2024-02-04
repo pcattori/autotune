@@ -1,12 +1,11 @@
 import { Routes } from "autotune";
 
-import routeB from "./route";
+import routeB, { routeA } from "./route";
 
-const routes = {
+export default {
   products: {
+    "slug/1": routeA,
     ":slug/1": routeB,
     ":slug/2": import("./route").then((m) => m.default),
   },
 } satisfies Routes;
-
-export default routes;
