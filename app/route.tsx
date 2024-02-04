@@ -27,7 +27,7 @@ export const routeB = route$({
         <h1>Welcome to Autotune</h1>
         <h2>You're on the {params.slug} page</h2>
         <pre>{data}</pre>
-        <Link to="about">About</Link>
+        <Link to="products/noslug/1">About</Link>
       </>
     );
   },
