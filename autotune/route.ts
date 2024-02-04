@@ -33,7 +33,3 @@ export const route$ = <
 >(
   route: Route<P, L, A, C>,
 ) => route;
-
-export const Link = (props: { to: string; children: ReactNode }) => (
-  <a href={props.to} />
-);

@@ -22,7 +22,7 @@
 
     "jsx": "react-jsx",
     "paths": {
-      "autotune": ["autotune/index.tsx"],
+      "autotune": ["./autotune/index.ts"],
       "~/*": ["./app/*"],
     },
   },
