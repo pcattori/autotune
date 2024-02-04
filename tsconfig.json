@@ -20,6 +20,7 @@
     /* If your code doesn't run in the DOM: */
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
 
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "paths": {
       "autotune": ["./autotune/index.ts"],

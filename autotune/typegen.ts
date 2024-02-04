@@ -1,5 +1,7 @@
 import fs from "node:fs";
+import path from "node:path";
 import dedent from "dedent";
+import chokidar from "chokidar";
 
 import { type Route } from "./route";
 
@@ -7,10 +9,30 @@ type RouteTree = {
   [key: string]: Route | RouteTree;
 };
 
-const routes = await import("../app/routes");
-generateTypes(routes.default as any);
+await watch();
 
-function generateTypes(routes: RouteTree): void {
+async function watch() {
+  let hash: string;
+  const routesFilepath = path.resolve("app/routes.ts");
+  const routes: RouteTree = (await import(routesFilepath)).default;
+  let types = generateTypes(routes);
+  hash = types;
+  fs.writeFileSync("autotune.d.ts", types);
+  console.log("[autotune] typegen");
+
+  chokidar.watch(routesFilepath).on("change", async () => {
+    const routes: RouteTree = (
+      await import(routesFilepath + "?t=" + Date.now())
+    ).default;
+    let types = generateTypes(routes);
+    if (types === hash) return;
+    hash = types;
+    fs.writeFileSync("autotune.d.ts", types);
+    console.log("[autotune] typegen");
+  });
+}
+
+function generateTypes(routes: RouteTree): string {
   const routePaths: string[] = [];
 
   const routeTypes = traverseMap(routes, (path) => {
@@ -48,7 +70,7 @@ function generateTypes(routes: RouteTree): void {
       interface RoutePaths ${routePathType}
     }
   `;
-  fs.writeFileSync("autotune.d.ts", contents);
+  return contents;
 }
 
 function isRoute(node: Route | Promise<Route> | RouteTree): node is Route {
